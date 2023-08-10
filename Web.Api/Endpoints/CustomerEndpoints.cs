@@ -8,7 +8,9 @@ namespace Web.Api.Endpoints
     {
         public static void MapCustomerEndpoints(this IEndpointRouteBuilder builder) 
         {
-            builder.MapGet("customers", async (SqlConnectionFactory sqlConnection) =>
+            var group = builder.MapGroup("customers");
+
+            group.MapGet("", async (SqlConnectionFactory sqlConnection) =>
             {
                 using var connection = sqlConnection.Create();
 
@@ -19,7 +21,7 @@ namespace Web.Api.Endpoints
                 return Results.Ok(customers);
             });
 
-            builder.MapGet("customers/{id}", async (int id, SqlConnectionFactory sqlConnection) =>
+            group.MapGet("{id}", async (int id, SqlConnectionFactory sqlConnection) =>
             {
                 using var connection = sqlConnection.Create();
 
@@ -37,7 +39,7 @@ namespace Web.Api.Endpoints
                 return customer is not null ? Results.Ok(customer) : Results.NotFound();
             });
 
-            builder.MapPost("customers", async (Customer newCustomer, SqlConnectionFactory sqlConnection) =>
+            group.MapPost("", async (Customer newCustomer, SqlConnectionFactory sqlConnection) =>
             {
                 using var connection = sqlConnection.Create();
 
@@ -51,7 +53,7 @@ namespace Web.Api.Endpoints
                 return Results.Ok(newCustomer);
             });
 
-            builder.MapPut("customers/{id}", async (int id, Customer updCustomer, SqlConnectionFactory sqlConnection) =>
+            group.MapPut("{id}", async (int id, Customer updCustomer, SqlConnectionFactory sqlConnection) =>
             {
                 using var connection = sqlConnection.Create();
 
@@ -71,7 +73,7 @@ namespace Web.Api.Endpoints
                 return Results.NoContent();
             });
 
-            builder.MapDelete("customers/{id}", async (int id, SqlConnectionFactory sqlConnection) =>
+            group.MapDelete("{id}", async (int id, SqlConnectionFactory sqlConnection) =>
             {
                 using var connection = sqlConnection.Create();
 
